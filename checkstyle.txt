@@ -1,6 +1,18 @@
 Starting audit...
-[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\Main.java:1:1: Utility classes should not have a public or default constructor. [HideUtilityClassConstructor]
-[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\Main.java:3:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\Main.java:3:29: Parameter args should be final. [FinalParameters]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\constants\Constants.java:11:46: '=' is not preceded with whitespace. [WhitespaceAround]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\input\ConsumerInput.java:18:23: Parameter id should be final. [FinalParameters]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\input\ConsumerInput.java:26:34: Parameter initialBudget should be final. [FinalParameters]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\input\ConsumerInput.java:34:34: Parameter monthlyIncome should be final. [FinalParameters]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\input\CostsChangesInput.java:20:23: Parameter id should be final. [FinalParameters]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\input\DistributorInput.java:26:23: Parameter id should be final. [FinalParameters]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\input\Input.java:3:8: Unused import - org.json.simple.JSONObject. [UnusedImports]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\input\InputLoader.java:3:34: Using the '.*' form of import should be avoided - com.fasterxml.jackson.core.*. [AvoidStarImport]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\input\InputLoader.java:4:8: Unused import - com.fasterxml.jackson.databind.ObjectMapper. [UnusedImports]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\input\InputLoader.java:23:5: Missing a Javadoc comment. [MissingJavadocMethod]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\Main.java:1:8: Unused import - com.fasterxml.jackson.databind.ObjectMapper. [UnusedImports]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\Main.java:5:8: Unused import - java.io.File. [UnusedImports]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\Main.java:7:1: Utility classes should not have a public or default constructor. [HideUtilityClassConstructor]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\Main.java:9:5: Missing a Javadoc comment. [MissingJavadocMethod]
+[ERROR] C:\Users\Cosmin\Desktop\proiect_poo\proiect-etapa1\.\src\Main.java:9:29: Parameter args should be final. [FinalParameters]
 Audit done.
-Checkstyle ends with 3 errors.
+Checkstyle ends with 15 errors.
