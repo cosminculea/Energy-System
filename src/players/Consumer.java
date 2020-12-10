@@ -1,15 +1,16 @@
 package players;
 
+import contract.Contract;
 import input.ConsumerInput;
 
 
 public final class Consumer implements Player {
-    private int id;
+    private final int id;
     private int budget;
-    private int monthlyIncome;
+    private final int monthlyIncome;
     private Contract contract;
 
-    public Consumer(ConsumerInput consumerInput) {
+    public Consumer(final ConsumerInput consumerInput) {
         this.id = consumerInput.getId();
         this.budget = consumerInput.getInitialBudget();
         this.monthlyIncome = consumerInput.getMonthlyIncome();
@@ -22,19 +23,24 @@ public final class Consumer implements Player {
 
     @Override
     public boolean isBankrupt() {
-        if (budget < 0) {
-            return true;
-        }
+        return budget < contract.getPrice();
+    }
 
-        return false;
+    @Override
+    public void payDebts() {
+        if (budget >= contract.getPrice()) {
+            budget = budget - contract.getPrice();
+            contract.decreaseMonths();
+        }
+    }
+
+    @Override
+    public void receiveMoney() {
+        budget = budget + monthlyIncome;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getBudget() {

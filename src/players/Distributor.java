@@ -1,6 +1,9 @@
 package players;
 
+import contract.Contract;
 import input.DistributorInput;
+
+import java.util.ArrayList;
 
 public final class Distributor implements Player {
     private int id;
@@ -9,7 +12,7 @@ public final class Distributor implements Player {
     private int infrastructureCost;
     private int productionCost;
     private int currentPriceContract;
-    private Contract contract;
+    private ArrayList<Contract> contracts;
 
     public Distributor(DistributorInput distributorInput) {
         this.id = distributorInput.getId();
@@ -17,15 +20,34 @@ public final class Distributor implements Player {
         this.budget = distributorInput.getInitialBudget();
         this.infrastructureCost = distributorInput.getInitialInfrastructureCost();
         this.productionCost =  distributorInput.getInitialProductionCost();
+        contracts = new ArrayList<>();
+
+        int profit = (int) Math.round(Math.floor(0.2 * productionCost));
+        currentPriceContract =  infrastructureCost + productionCost + profit;
     }
 
     @Override
     public boolean isBankrupt() {
-        return budget < 0;
+        return budget < infrastructureCost + productionCost * contracts.size();
     }
 
+    @Override
     public void signContract(Contract contract) {
-        this.contract = contract;
+        contracts.add(contract);
+    }
+
+    @Override
+    public void payDebts() {
+        budget = budget - infrastructureCost - productionCost * contracts.size();
+    }
+
+    @Override
+    public void receiveMoney() {
+        for (Contract contract : contracts) {
+            if (!contract.getCounterpart().isBankrupt()) {
+                budget = budget + contract.getPrice();
+            }
+        }
     }
 
     public void setInfrastructureCost(int infrastructureCost) {
@@ -38,6 +60,10 @@ public final class Distributor implements Player {
 
     public int getId() {
         return id;
+    }
+
+    public ArrayList<Contract> getContracts() {
+        return contracts;
     }
 
     public int getContractLength() {

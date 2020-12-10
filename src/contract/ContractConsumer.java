@@ -1,37 +1,41 @@
-package players;
+package contract;
+
+import players.Distributor;
+import players.Player;
 
 public final class ContractConsumer implements Contract {
-    private Player distributor;
+    private final Player distributor;
     private int price;
     private int remainedContractMonths;
 
-    public ContractConsumer (Player distributor) {
+    public ContractConsumer (final Player distributor) {
         this.distributor = distributor;
         this.price = ((Distributor) distributor).getCurrentPriceContract();
         this.remainedContractMonths = ((Distributor) distributor).getContractLength();
     }
 
-    public Player getDistributor() {
+    public Player getCounterpart() {
         return distributor;
-    }
-
-    public void setDistributor(Distributor distributor) {
-        this.distributor = distributor;
     }
 
     public int getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    @Override
+    public boolean contractExpired() {
+        return remainedContractMonths == 0;
     }
 
     public int getRemainedContractMonths() {
         return remainedContractMonths;
     }
 
-    public void setRemainedContractMonths(int remainedContractMonths) {
-        this.remainedContractMonths = remainedContractMonths;
+    public void decreaseMonths() {
+        remainedContractMonths--;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }

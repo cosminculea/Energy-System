@@ -50,7 +50,7 @@ public final class InputLoader {
                         distributorJSON.get(Constants.ID).toString(),
                         distributorJSON.get(Constants.CONTRACT_LENGTH).toString(),
                         distributorJSON.get(Constants.INITIAL_BUDGET).toString(),
-                        distributorJSON.get(Constants.INITIAL_INFRASTRUCURE_COST).toString(),
+                        distributorJSON.get(Constants.INITIAL_INFRASTRUCTURE_COST).toString(),
                         distributorJSON.get(Constants.INITIAL_PRODUCTION_COST).toString()));
             }
 
