@@ -16,24 +16,28 @@ public final class Distributor implements Player {
     private boolean isBankrupt = false;
 
     public Distributor(DistributorInput distributorInput) {
-        this.id = distributorInput.getId();
-        this.contractLength = distributorInput.getContractLength();
-        this.budget = distributorInput.getInitialBudget();
-        this.infrastructureCost = distributorInput.getInitialInfrastructureCost();
-        this.productionCost =  distributorInput.getInitialProductionCost();
+        id = distributorInput.getId();
+        contractLength = distributorInput.getContractLength();
+        budget = distributorInput.getInitialBudget();
+        infrastructureCost = distributorInput.getInitialInfrastructureCost();
+        productionCost =  distributorInput.getInitialProductionCost();
         contracts = new LinkedHashMap<>();
 
-        int profit = (int) Math.round(Math.floor(0.2 * productionCost));
+        int profit = (int )Math.round(Math.floor(0.2 * productionCost));
         currentPriceContract =  infrastructureCost + productionCost + profit;
     }
 
     @Override
-    public boolean isBankrupt() {
+    public void verifyBankruptcy() {
         if (!isBankrupt) {
             if (budget < infrastructureCost + productionCost * contracts.size())  {
                 isBankrupt = true;
             }
         }
+    }
+
+    @Override
+    public boolean isBankrupt() {
         return isBankrupt;
     }
 
@@ -65,8 +69,8 @@ public final class Distributor implements Player {
         int profit = (int) Math.round(Math.floor(0.2 * productionCost));
 
         if (hasContract()) {
-            currentPriceContract = (int) (Math.round(1.0 * infrastructureCost / contracts.size())
-                                            + productionCost + profit);
+            currentPriceContract = (int) (Math.round(Math.floor(infrastructureCost / contracts.size())
+                                            + productionCost + profit));
         } else {
             currentPriceContract =  infrastructureCost + productionCost + profit;
         }
@@ -76,6 +80,7 @@ public final class Distributor implements Player {
     @Override
     public void closeContracts() {
         budget = budget - infrastructureCost - productionCost * contracts.size();
+
         for (Contract contract : contracts.values()) {
             contract.getCounterpart().closeContracts();
         }

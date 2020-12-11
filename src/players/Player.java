@@ -4,6 +4,7 @@ import contract.Contract;
 
 public interface Player {
     boolean isBankrupt();
+    void verifyBankruptcy();
     void signContract(Contract contract);
     int getBudget();
     void payDebts();

@@ -85,6 +85,8 @@ public class Simulation {
 
         for (Integer consumerId : consumersInGame.keySet()) {
             Player consumer = consumersInGame.get(consumerId);
+            consumer.verifyBankruptcy();
+
             if (consumer.isBankrupt()) {
                 consumer.closeContracts();
             } else {
@@ -99,6 +101,7 @@ public class Simulation {
 
         for (Integer distributorId : distributorsInGame.keySet()) {
             Player distributor = distributorsInGame.get(distributorId);
+            distributor.verifyBankruptcy();
 
             if (distributor.isBankrupt()) {
                 distributor.closeContracts();
@@ -135,7 +138,11 @@ public class Simulation {
                                   Map<Integer, Player> consumersInGame) {
 
         for (Player distributor : distributors) {
-            distributorsInGame.put(distributor.getId(), distributor);
+            distributor.verifyBankruptcy();
+
+            if (!distributor.isBankrupt()) {
+                distributorsInGame.put(distributor.getId(), distributor);
+            }
         }
 
         for (Player consumer : consumers) {
@@ -159,7 +166,18 @@ public class Simulation {
             consumers.add(PlayerFactory.getPlayer(consumerInput, Constants.CONSUMER));
         }
 
-        Player cheapestDistributor= findCheapestDistributor();
+        Distributor cheapestDistributor = (Distributor) distributors.get(0);
+
+        for (Player player : distributors) {
+            Distributor distributor = (Distributor) player;
+
+            if (!distributor.isBankrupt()) {
+                if (distributor.getCurrentPriceContract() <
+                        cheapestDistributor.getCurrentPriceContract()) {
+                    cheapestDistributor = distributor;
+                }
+            }
+        }
 
         for (Player consumer : consumers) {
             consumer.receiveMoney(((Consumer) consumer).getMonthlyIncome());
@@ -175,19 +193,24 @@ public class Simulation {
         }
 
         for (Player distributor : distributors) {
+            distributor.verifyBankruptcy();
             distributor.payDebts();
         }
+
     }
 
     public Player findCheapestDistributor() {
-        Distributor cheapestDistributor = (Distributor) distributors.get(0);
+        Iterator<Player> it = distributorsInGame.values().iterator();
+        Distributor cheapestDistributor = (Distributor) it.next();
 
-        for (Player player : distributors) {
-            Distributor distributor = (Distributor) player;
+        while (it.hasNext()) {
+            Distributor distributor = (Distributor) it.next();
 
-            if (distributor.getCurrentPriceContract() <
-                                            cheapestDistributor.getCurrentPriceContract()) {
-                cheapestDistributor = distributor;
+            if (!distributor.isBankrupt()) {
+                if (distributor.getCurrentPriceContract() <
+                        cheapestDistributor.getCurrentPriceContract()) {
+                    cheapestDistributor = distributor;
+                }
             }
         }
 

@@ -4,8 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ActionInput {
+
+    /**
+     * list of new consumers in a month
+     */
+
     private List<ConsumerInput> newConsumers;
+
+    /**
+     * list of costs changes in a month
+     */
+
     private List<CostsChangesInput> costsChanges;
+
+    /**
+     * constructor which initialise the lists
+     */
 
     public ActionInput() {
         newConsumers = new ArrayList<>();

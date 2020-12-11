@@ -26,13 +26,19 @@ public final class Consumer implements Player {
         this.contract = contract;
     }
 
+
     @Override
-    public boolean isBankrupt() {
+    public void verifyBankruptcy() {
         if (!isBankrupt) {
-            if (hasOverduePayments && budget < Math.round(Math.floor(2.2 * contract.getPrice()))) {
+            if (hasOverduePayments &&
+                    budget < (int) Math.round(Math.floor(2.2 * contract.getPrice()))) {
                 isBankrupt = true;
             }
         }
+    }
+
+    @Override
+    public boolean isBankrupt() {
         return isBankrupt;
     }
 
@@ -43,7 +49,15 @@ public final class Consumer implements Player {
             contract.getCounterpart().receiveMoney(contract.getPrice());
             contract.decreaseMonths();
         } else {
-            hasOverduePayments = true;
+            if (!hasOverduePayments) {
+                hasOverduePayments = true;
+            } else {
+                budget = budget - (int) Math.round(Math.floor(2.2 * contract.getPrice()));
+                contract.getCounterpart()
+                        .receiveMoney((int) Math.round(Math.floor(2.2 * contract.getPrice())));
+                contract.decreaseMonths();
+                hasOverduePayments = false;
+            }
         }
     }
 
