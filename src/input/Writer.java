@@ -9,6 +9,7 @@ import players.Player;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Writer {
     FileWriter output;
@@ -40,7 +41,10 @@ public class Writer {
             distributorJSON.put(Constants.BUDGET, distributor.getBudget());
 
             JSONArray contractsJSON = new JSONArray();
-            for (Contract contract : ((Distributor) distributor).getContracts()) {
+            Map<Integer, Contract> contracts = ((Distributor) distributor).getContracts();
+
+            for (Integer id : contracts.keySet()) {
+                Contract contract = contracts.get(id);
                 JSONObject contractJSON = new JSONObject();
                 contractJSON.put(Constants.CONSUMER_ID, contract.getCounterpart().getId());
                 contractJSON.put(Constants.PRICE, contract.getPrice());
@@ -58,5 +62,6 @@ public class Writer {
         object.put(Constants.DISTRIBUTORS, distributorsJSON);
 
         output.write(object.toJSONString());
+        output.flush();
     }
 }

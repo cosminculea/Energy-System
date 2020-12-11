@@ -7,6 +7,8 @@ public interface Player {
     void signContract(Contract contract);
     int getBudget();
     void payDebts();
-    void receiveMoney();
+    void receiveMoney(final int sum);
     int getId();
+    boolean hasContract();
+    void closeContracts();
 }

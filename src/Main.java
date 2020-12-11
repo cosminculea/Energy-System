@@ -1,10 +1,9 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import input.Input;
 import input.InputLoader;
 import input.Writer;
 import simulation.Simulation;
 
-import java.io.File;
 
 public class Main {
 
@@ -22,6 +21,8 @@ public class Main {
 
         Writer writer = new Writer(args[1]);
         writer.writeInFile(simulation.getDistributors(), simulation.getConsumers());
+
+        simulation.clearGame();
 
     }
 }
