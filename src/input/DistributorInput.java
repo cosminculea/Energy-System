@@ -1,11 +1,41 @@
 package input;
 
 public final class DistributorInput {
+
+    /**
+     * the distributor's id
+     */
+
     private int id;
+
+    /**
+     * the length of every contract
+     */
+
     private int contractLength;
+
+    /**
+     * the initial budget given by the input
+     */
+
     private int initialBudget;
+
+    /**
+     * the initial infrastructure cost of the distributor given by the input
+     */
+
     private int initialInfrastructureCost;
+
+    /**
+     * the initial production cost of the distributor given by the input
+     */
+
     private int initialProductionCost;
+
+    /**
+     * constructor which initialise the fields with the inputs given as strings, transforming them
+     * to integers
+     */
 
     public DistributorInput(final String id,
                             final String contractLength,
@@ -23,7 +53,7 @@ public final class DistributorInput {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 

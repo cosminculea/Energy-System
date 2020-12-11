@@ -1,9 +1,29 @@
 package input;
 
 public final class CostsChangesInput {
+
+    /**
+     * id of the distributor which needs to changes his costs
+     */
+
     private int id;
+
+    /**
+     * the new infrastructure cost of the distributor
+     */
+
     private int infrastructureCost;
+
+    /**
+     * the new production cost of the distributor
+     */
+
     private int productionCost;
+
+    /**
+     * constructor which initialise the fields with the inputs given as strings, transforming them
+     * to integers
+     */
 
     public CostsChangesInput(final String id,
                              final String infrastructureCost,
@@ -17,7 +37,7 @@ public final class CostsChangesInput {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 

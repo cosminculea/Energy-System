@@ -1,12 +1,20 @@
 package input;
 
-import org.json.simple.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public final class Input {
+
+    /**
+     * the number of turns given by the input
+     */
+
     private int numberOfTurns;
+
+    /**
+     *
+     */
+
     private EntitiesInput initialData;
     private List<ActionInput> monthlyUpdates;
 

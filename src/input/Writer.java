@@ -12,11 +12,29 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class Writer {
+
+    /**
+     * the file in which the data is written
+     */
+
     FileWriter output;
+
+    /**
+     * constructor which initialise the file writer
+     * @param fileName the name of the film as string
+     * @throws IOException if the opening of the file failed
+     */
 
     public Writer(final String fileName) throws IOException {
         output = new FileWriter(fileName);
     }
+
+    /**
+     * write all the necessary data of the consumers and distributors
+     * @param distributors list of all distributors in the system
+     * @param consumers list of all consumer in the system
+     * @throws IOException if the writing has failed
+     */
 
     @SuppressWarnings("unchecked")
     public void writeInFile(final ArrayList<Player> distributors,
