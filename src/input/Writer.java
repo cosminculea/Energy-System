@@ -17,7 +17,7 @@ public class Writer {
      * the file in which the data is written
      */
 
-    FileWriter output;
+    private final FileWriter output;
 
     /**
      * constructor which initialise the file writer

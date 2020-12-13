@@ -6,7 +6,7 @@ import players.Player;
 public final class ContractDistributor implements Contract {
 
     /**
-     * the consumer which the distributor gives energy to
+     * the consumer whom the distributor gives energy to
      */
 
     private final Player consumer;

@@ -59,7 +59,11 @@ public final class InputLoader {
         return input;
     }
 
-    void loadConsumers(Input input, JSONArray consumers) {
+    /**
+     * loads all consumers given by the input
+     */
+
+    void loadConsumers(final Input input, final JSONArray consumers) {
         List<ConsumerInput> consumersInput = input.getInitialData().getConsumers();
 
         for (Object consumer : consumers) {
@@ -70,7 +74,11 @@ public final class InputLoader {
         }
     }
 
-    void loadDistributors(Input input, JSONArray distributors ) {
+    /**
+     * loads all distributors given by the input
+     */
+
+    void loadDistributors(final Input input, final JSONArray distributors) {
         List<DistributorInput> distributorsInput = input.getInitialData().getDistributors();
 
         for (Object distributor : distributors) {
@@ -84,7 +92,11 @@ public final class InputLoader {
         }
     }
 
-    void loadMonthlyUpdates(Input input, JSONArray monthlyUpdates) {
+    /**
+     * loads all the updates from input represented by months (rounds of the game)
+     */
+
+    void loadMonthlyUpdates(final Input input, final JSONArray monthlyUpdates) {
         List<ActionInput> monthlyUpdatesInput = input.getMonthlyUpdates();
 
 
@@ -122,5 +134,4 @@ public final class InputLoader {
             monthlyUpdatesInput.add(actionInput);
         }
     }
-
 }

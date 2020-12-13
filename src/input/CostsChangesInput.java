@@ -3,7 +3,7 @@ package input;
 public final class CostsChangesInput {
 
     /**
-     * id of the distributor which needs to changes his costs
+     * id of the distributor who needs to change his costs
      */
 
     private int id;

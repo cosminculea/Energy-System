@@ -12,8 +12,8 @@ public final class ContractFactory {
     private ContractFactory() { }
 
     /**
-     * @param distributor the distributor which offers the energy to the consumer
-     * @param consumer the consumer which requires energy from the distributor
+     * @param distributor the distributor who offers the energy to the consumer
+     * @param consumer the consumer who requires energy from the distributor
      * @param type the type of the contract (for consumer or distributor)
      * @return ContractConsumer or ContractDistributor, depending on the type given by parameter,
      * or null otherwise
