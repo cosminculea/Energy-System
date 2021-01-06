@@ -7,12 +7,12 @@ import input.ActionInput;
 import input.ConsumerInput;
 import input.CostsChangesInput;
 import input.EntitiesInput;
-import players.Consumer;
+import player.Consumer;
 import input.DistributorInput;
-import players.Distributor;
-import players.Player;
+import player.Distributor;
+import player.Player;
 import java.util.Iterator;
-import players.PlayerFactory;
+import player.PlayerFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -240,7 +240,7 @@ public final class Simulation {
                         consumer, Constants.DISTRIBUTOR);
 
                 if (consumer.hasContract()) {
-                    consumer.closeContracts();
+                    consumer.terminateContracts();
                 }
 
                 consumer.signContract(contractForConsumer);
@@ -253,7 +253,7 @@ public final class Simulation {
      * - this method marks the end of one round for consumers, in which they have to pay de debts
      * they have
      * - for every consumer it verifies if he is bankrupt, and if the response is true his
-     * contract is closed and he is eliminated from the game
+     * contract is terminated and he is eliminated from the game
      * - otherwise he pays the debts
      */
 
@@ -264,7 +264,7 @@ public final class Simulation {
             consumer.verifyBankruptcy();
 
             if (consumer.isBankrupt()) {
-                consumer.closeContracts();
+                consumer.terminateContracts();
             } else {
                 consumer.payDebts();
             }
@@ -278,7 +278,7 @@ public final class Simulation {
      * debts they have
      * - for every distributor it verifies if he is bankrupt and then he pays his debts, regardless
      * of his state of bankruptcy
-     * - if the distributor is bankrupt after the verification he closes all the contract he has
+     * - if the distributor is bankrupt after the verification he terminates all the contract he has
      * with all of the consumers and is eliminated from the game
      */
 
@@ -290,7 +290,7 @@ public final class Simulation {
             distributor.payDebts();
 
             if (distributor.isBankrupt()) {
-                distributor.closeContracts();
+                distributor.terminateContracts();
             }
         }
 

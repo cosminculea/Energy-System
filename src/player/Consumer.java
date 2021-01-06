@@ -1,4 +1,4 @@
-package players;
+package player;
 
 import contract.Contract;
 import input.ConsumerInput;
@@ -142,7 +142,7 @@ public final class Consumer implements Player {
      */
 
     @Override
-    public void closeContracts() {
+    public void terminateContracts() {
         Distributor counterpart = (Distributor) contract.getCounterpart();
         counterpart.getContracts().remove(id);
 

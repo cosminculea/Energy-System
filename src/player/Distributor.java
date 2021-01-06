@@ -1,4 +1,4 @@
-package players;
+package player;
 
 import contract.Contract;
 import input.DistributorInput;
@@ -169,10 +169,10 @@ public final class Distributor implements Player {
      */
 
     @Override
-    public void closeContracts() {
+    public void terminateContracts() {
 
         for (Contract contract : contracts.values()) {
-            contract.getCounterpart().closeContracts();
+            contract.getCounterpart().terminateContracts();
         }
 
         contracts.clear();

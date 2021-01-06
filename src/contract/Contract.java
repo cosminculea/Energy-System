@@ -1,6 +1,6 @@
 package contract;
 
-import players.Player;
+import player.Player;
 
 public interface Contract {
 

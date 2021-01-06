@@ -1,7 +1,7 @@
 package contract;
 
-import players.Distributor;
-import players.Player;
+import player.Distributor;
+import player.Player;
 
 public final class ContractConsumer implements Contract {
 

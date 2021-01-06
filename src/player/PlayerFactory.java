@@ -1,4 +1,4 @@
-package players;
+package player;
 
 import constants.Constants;
 import input.ConsumerInput;

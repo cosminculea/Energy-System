@@ -1,4 +1,4 @@
-package players;
+package player;
 
 import contract.Contract;
 
@@ -47,7 +47,7 @@ public interface Player {
      * remove all contracts the player has (this can happen when the player is bankrupt)
      */
 
-    void closeContracts();
+    void terminateContracts();
 
     /**
      * @return the player's id

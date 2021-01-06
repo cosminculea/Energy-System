@@ -1,11 +1,11 @@
-package input;
+package output;
 
 import constants.Constants;
 import contract.Contract;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import players.Distributor;
-import players.Player;
+import player.Distributor;
+import player.Player;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
