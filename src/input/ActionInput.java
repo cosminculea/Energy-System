@@ -12,10 +12,16 @@ public final class ActionInput {
     private List<ConsumerInput> newConsumers;
 
     /**
-     * list of costs changes in a month
+     * list of all distributors changes in a month
      */
 
-    private List<CostsChangesInput> costsChanges;
+    private List<DistributorChange> distributorsChanges;
+
+    /**
+     * list of all producers changes in a month
+     */
+
+    private List<ProducerChange> producersChanges;
 
     /**
      * constructor which initialise the lists
@@ -23,7 +29,8 @@ public final class ActionInput {
 
     public ActionInput() {
         newConsumers = new ArrayList<>();
-        costsChanges = new ArrayList<>();
+        distributorsChanges = new ArrayList<>();
+        producersChanges = new ArrayList<>();
     }
 
     public List<ConsumerInput> getNewConsumers() {
@@ -34,12 +41,19 @@ public final class ActionInput {
         this.newConsumers = newConsumers;
     }
 
-    public List<CostsChangesInput> getCostsChanges() {
-        return costsChanges;
+    public List<DistributorChange> getDistributorsChanges() {
+        return distributorsChanges;
     }
 
-    public void setCostsChanges(final List<CostsChangesInput> costsChanges) {
-        this.costsChanges = costsChanges;
+    public void setDistributorsChanges(List<DistributorChange> distributorsChanges) {
+        this.distributorsChanges = distributorsChanges;
     }
 
+    public List<ProducerChange> getProducersChanges() {
+        return producersChanges;
+    }
+
+    public void setProducersChanges(List<ProducerChange> producersChanges) {
+        this.producersChanges = producersChanges;
+    }
 }

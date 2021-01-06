@@ -1,11 +1,13 @@
-package player;
+package entities.player;
 
 import contract.Contract;
+import entities.Entity;
 import input.DistributorInput;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public final class Distributor implements Player {
+public final class Distributor implements Player, Entity {
     public static final double PROFIT_PERCENTAGE = 0.2;
 
     /**
@@ -39,6 +41,20 @@ public final class Distributor implements Player {
     private int productionCost;
 
     /**
+     * the energy needed by the distributor from the producers in KW
+     */
+
+
+    private int energyNeededKW;
+
+    /**
+     * the strategy after which the distributor chooses his producers
+     */
+
+    private String producerStrategy;
+
+
+    /**
      * current price of all contract signed on the current month
      */
 
@@ -67,7 +83,8 @@ public final class Distributor implements Player {
         contractLength = distributorInput.getContractLength();
         budget = distributorInput.getInitialBudget();
         infrastructureCost = distributorInput.getInitialInfrastructureCost();
-        productionCost =  distributorInput.getInitialProductionCost();
+        energyNeededKW = distributorInput.getEnergyNeededKW();
+        producerStrategy =  distributorInput.getProducerStrategy();
         contracts = new LinkedHashMap<>();
 
         int profit = (int) Math.round(Math.floor(PROFIT_PERCENTAGE * productionCost));
@@ -151,7 +168,7 @@ public final class Distributor implements Player {
 
     @Override
     public void receiveMoney(final int sum) {
-       budget = budget + sum;
+        budget = budget + sum;
     }
 
     /**

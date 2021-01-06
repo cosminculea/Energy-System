@@ -27,10 +27,16 @@ public final class DistributorInput {
     private int initialInfrastructureCost;
 
     /**
-     * the initial production cost of the distributor given by the input
+     * the energy needed by the distributor from the producers in KW
      */
 
-    private int initialProductionCost;
+    private int energyNeededKW;
+
+    /**
+     * the strategy after which the distributor chooses his producers
+     */
+
+    private String producerStrategy;
 
     /**
      * constructor which initialise the fields with the inputs given as strings, transforming them
@@ -41,12 +47,14 @@ public final class DistributorInput {
                             final String contractLength,
                             final String initialBudget,
                             final String initialInfrastructureCost,
-                            final String initialProductionCost) {
+                            final String energyNeededKW,
+                            final String producerStrategy) {
         this.id = Integer.parseInt(id);
         this.contractLength = Integer.parseInt(contractLength);
         this.initialBudget = Integer.parseInt(initialBudget);
         this.initialInfrastructureCost = Integer.parseInt(initialInfrastructureCost);
-        this.initialProductionCost = Integer.parseInt(initialProductionCost);
+        this.energyNeededKW = Integer.parseInt(energyNeededKW);
+        this.producerStrategy = producerStrategy;
     }
 
     public int getId() {
@@ -81,11 +89,19 @@ public final class DistributorInput {
         this.initialInfrastructureCost = initialInfrastructureCost;
     }
 
-    public int getInitialProductionCost() {
-        return initialProductionCost;
+    public int getEnergyNeededKW() {
+        return energyNeededKW;
     }
 
-    public void setInitialProductionCost(final int initialProductionCost) {
-        this.initialProductionCost = initialProductionCost;
+    public void setEnergyNeededKW(int energyNeededKW) {
+        this.energyNeededKW = energyNeededKW;
+    }
+
+    public String getProducerStrategy() {
+        return producerStrategy;
+    }
+
+    public void setProducerStrategy(String producerStrategy) {
+        this.producerStrategy = producerStrategy;
     }
 }

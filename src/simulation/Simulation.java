@@ -3,16 +3,13 @@ package simulation;
 import constants.Constants;
 import contract.Contract;
 import contract.ContractFactory;
-import input.ActionInput;
-import input.ConsumerInput;
-import input.CostsChangesInput;
-import input.EntitiesInput;
-import player.Consumer;
-import input.DistributorInput;
-import player.Distributor;
-import player.Player;
+import entities.EntityFactory;
+import entities.player.Consumer;
+import entities.player.Distributor;
+import entities.player.Player;
+import input.*;
+
 import java.util.Iterator;
-import player.PlayerFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +82,7 @@ public final class Simulation {
 
         for (ActionInput round : rounds) {
             resolveNewConsumers(round.getNewConsumers());
-            resolveCostsChanges(round.getCostsChanges());
+            resolveDistributorsChanges(round.getDistributorsChanges());
 
             calculateNewContracts();
             receiveSalaries();
@@ -172,20 +169,16 @@ public final class Simulation {
 
     private void resolveNewConsumers(final List<ConsumerInput> newConsumers) {
         for (ConsumerInput newConsumer : newConsumers) {
-            Player consumerCreated = PlayerFactory.getPlayer(newConsumer, Constants.CONSUMER);
+            Player consumerCreated = EntityFactory.getPlayer(newConsumer, Constants.CONSUMER);
             consumers.add(consumerCreated);
             consumersInGame.put(consumerCreated.getId(), consumerCreated);
         }
     }
 
-    /**
-     * - updates the infrastructure cost and production cost for the distributors given by the input
-     * with their ids
-     * @param costsChanges list of costs changes given by the input for a round
-     */
 
-    private void resolveCostsChanges(final List<CostsChangesInput> costsChanges) {
-        for (CostsChangesInput costChanges : costsChanges) {
+
+    private void resolveDistributorsChanges(final List<DistributorChange> distributorsChanges) {
+        for (DistributorChange costChanges : distributorsChanges) {
             Distributor distributor = (Distributor) distributorsInGame.get(costChanges.getId());
 
             if (distributor == null) {
@@ -193,7 +186,6 @@ public final class Simulation {
             }
 
             distributor.setInfrastructureCost(costChanges.getInfrastructureCost());
-            distributor.setProductionCost(costChanges.getProductionCost());
         }
     }
 
@@ -315,11 +307,11 @@ public final class Simulation {
         List<DistributorInput> distributorsInput = initialData.getDistributors();
 
         for (DistributorInput distributorInput : distributorsInput) {
-            distributors.add(PlayerFactory.getPlayer(distributorInput, Constants.DISTRIBUTOR));
+            distributors.add(EntityFactory.getPlayer(distributorInput, Constants.DISTRIBUTOR));
         }
 
         for (ConsumerInput consumerInput : consumersInput) {
-            consumers.add(PlayerFactory.getPlayer(consumerInput, Constants.CONSUMER));
+            consumers.add(EntityFactory.getPlayer(consumerInput, Constants.CONSUMER));
         }
     }
 

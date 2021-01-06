@@ -1,0 +1,66 @@
+package input;
+
+public class ProducerInput {
+
+    /**
+     * the id of the producer
+     */
+
+    final int id;
+
+    /**
+     * the type of energy the producer generates
+     */
+
+    final String energyType;
+
+    /**
+     * the maximum number of distributors a producer can have
+     */
+
+    final int maxDistributors;
+
+    /**
+     * the price of the the energy per KW
+     */
+
+    final double priceKW;
+
+    /**
+     * how much energy measured in KW a producer can give to one distributor
+     */
+
+    final int energyPerDistributor;
+
+    public ProducerInput(final String id,
+                         final String energyType,
+                         final String maxDistributors,
+                         final String priceKW,
+                         final String energyPerDistributor) {
+        this.id = Integer.parseInt(id);
+        this.energyType = energyType;
+        this.maxDistributors = Integer.parseInt(maxDistributors);
+        this.priceKW = Double.parseDouble(priceKW);
+        this.energyPerDistributor = Integer.parseInt(energyPerDistributor);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getEnergyType() {
+        return energyType;
+    }
+
+    public int getMaxDistributors() {
+        return maxDistributors;
+    }
+
+    public double getPriceKW() {
+        return priceKW;
+    }
+
+    public int getEnergyPerDistributor() {
+        return energyPerDistributor;
+    }
+}

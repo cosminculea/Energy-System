@@ -2,10 +2,11 @@ package output;
 
 import constants.Constants;
 import contract.Contract;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import entities.player.Distributor;
 import entities.player.Player;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;

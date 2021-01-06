@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public final class InputLoader {
 
@@ -47,9 +48,11 @@ public final class InputLoader {
 
             JSONArray consumers = (JSONArray) initialData.get(Constants.CONSUMERS);
             JSONArray distributors = (JSONArray) initialData.get(Constants.DISTRIBUTORS);
+            JSONArray producers = (JSONArray) initialData.get(Constants.PRODUCERS);
 
             loadConsumers(input, consumers);
             loadDistributors(input, distributors);
+            loadProducers(input, producers);
             loadMonthlyUpdates(input, monthlyUpdates);
 
         } catch (ParseException e) {
@@ -88,7 +91,22 @@ public final class InputLoader {
                     distributorJSON.get(Constants.CONTRACT_LENGTH).toString(),
                     distributorJSON.get(Constants.INITIAL_BUDGET).toString(),
                     distributorJSON.get(Constants.INITIAL_INFRASTRUCTURE_COST).toString(),
-                    distributorJSON.get(Constants.INITIAL_PRODUCTION_COST).toString()));
+                    distributorJSON.get(Constants.ENERGY_NEEDED_KW).toString(),
+                    distributorJSON.get(Constants.PRODUCER_STRATEGY).toString()));
+        }
+    }
+
+    void loadProducers(final Input input, final JSONArray producers) {
+        List<ProducerInput> producersInput = input.getInitialData().getProducers();
+
+        for (Object producer : producers) {
+            JSONObject producerJSON = (JSONObject) producer;
+            producersInput.add(new ProducerInput(
+                    producerJSON.get(Constants.ID).toString(),
+                    producerJSON.get(Constants.ENERGY_TYPE).toString(),
+                    producerJSON.get(Constants.MAX_DISTRIBUTORS).toString(),
+                    producerJSON.get(Constants.PRICE_KW).toString(),
+                    producerJSON.get(Constants.ENERGY_PER_DISTRIBUTOR).toString()));
         }
     }
 
@@ -103,11 +121,15 @@ public final class InputLoader {
         for (Object monthlyUpdate : monthlyUpdates) {
             JSONObject monthlyUpdateJSON = (JSONObject) monthlyUpdate;
             JSONArray newConsumers = (JSONArray) monthlyUpdateJSON.get(Constants.NEW_CONSUMERS);
-            JSONArray costsChanges = (JSONArray) monthlyUpdateJSON.get(Constants.COSTS_CHANGES);
+            JSONArray distributorsChanges =
+                    (JSONArray) monthlyUpdateJSON.get(Constants.DISTRIBUTOR_CHANGES);
+            JSONArray producersChanges =
+                    (JSONArray) monthlyUpdateJSON.get(Constants.PRODUCER_CHANGES);
 
             ActionInput actionInput = new ActionInput();
             List<ConsumerInput> newConsumersInput = actionInput.getNewConsumers();
-            List<CostsChangesInput> costsChangesInput = actionInput.getCostsChanges();
+            List<DistributorChange> distributorsChangesInput = actionInput.getDistributorsChanges();
+            List<ProducerChange> producersChangesInput = actionInput.getProducersChanges();
 
             for (Object newConsumer : newConsumers) {
                 JSONObject newConsumerJSON = (JSONObject) newConsumer;
@@ -118,18 +140,27 @@ public final class InputLoader {
                         newConsumerJSON.get(Constants.MONTHLY_INCOME).toString()));
             }
 
-            for (Object costsChange : costsChanges) {
-                JSONObject costsChangeJSON = (JSONObject) costsChange;
+            for (Object distributorChange : distributorsChanges) {
+                JSONObject distributorChangeJSON = (JSONObject) distributorChange;
 
-                costsChangesInput.add(new CostsChangesInput(
-                        costsChangeJSON.get(Constants.ID).toString(),
-                        costsChangeJSON.get(Constants.INFRASTRUCTURE_COST).toString(),
-                        costsChangeJSON.get(Constants.PRODUCTION_COST).toString()));
+                distributorsChangesInput.add(new DistributorChange(
+                        distributorChangeJSON.get(Constants.ID).toString(),
+                        distributorChangeJSON.get(Constants.INFRASTRUCTURE_COST).toString()));
+
+            }
+
+            for (Object producerChange : producersChanges) {
+                JSONObject producerChangeJSON = (JSONObject) producerChange;
+
+                producersChangesInput.add(new ProducerChange(
+                        producerChangeJSON.get(Constants.ID).toString(),
+                        producerChangeJSON.get(Constants.ENERGY_PER_DISTRIBUTOR).toString()));
 
             }
 
             actionInput.setNewConsumers(newConsumersInput);
-            actionInput.setCostsChanges(costsChangesInput);
+            actionInput.setDistributorsChanges(distributorsChangesInput);
+            actionInput.setProducersChanges(producersChangesInput);
 
             monthlyUpdatesInput.add(actionInput);
         }

@@ -1,7 +1,7 @@
 package contract;
 
-import player.Distributor;
-import player.Player;
+import entities.player.Distributor;
+import entities.player.Player;
 
 public final class ContractDistributor implements Contract {
 

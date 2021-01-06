@@ -1,4 +1,4 @@
-package player;
+package entities.player;
 
 import contract.Contract;
 import input.ConsumerInput;

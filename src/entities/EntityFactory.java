@@ -1,16 +1,19 @@
-package player;
+package entities;
 
 import constants.Constants;
+import entities.player.Consumer;
+import entities.player.Distributor;
 import input.ConsumerInput;
 import input.DistributorInput;
+import entities.player.Player;
 
-public final class PlayerFactory {
+public final class EntityFactory {
 
     /**
      * private constructor (utility class)
      */
 
-    private PlayerFactory() { }
+    private EntityFactory() { }
 
     /**
      * static method used as a factory for players

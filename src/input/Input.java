@@ -12,10 +12,15 @@ public final class Input {
     private int numberOfTurns;
 
     /**
-     *
+     * all entities in the game
      */
 
     private EntitiesInput initialData;
+
+    /**
+     * list of all monthly updates
+     */
+
     private List<ActionInput> monthlyUpdates;
 
     public Input() {
