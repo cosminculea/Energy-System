@@ -1,7 +1,7 @@
 
 import input.Input;
 import input.InputLoader;
-import output.Writer;
+import input.Writer;
 import simulation.Simulation;
 
 import java.io.IOException;
