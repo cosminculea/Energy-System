@@ -2,7 +2,7 @@ package entities.player;
 
 import contract.Contract;
 
-public interface Player {
+public interface ActivePlayer {
 
     /**
      * @return true or false depending on the player's state, whether he is bankrupt (not in the
