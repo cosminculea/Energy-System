@@ -30,11 +30,13 @@ public final class Main {
         Simulation simulation = Simulation.getSimulation();
 
         simulation.setRounds(input.getMonthlyUpdates());
-        simulation.setPlayers(input.getInitialData());
+        simulation.setPlayers(input.getInitialData(), input.getMonthlyUpdates().size());
         simulation.play();
 
         Writer writer = new Writer(args[1]);
-        writer.writeInFile(simulation.getDistributors(), simulation.getConsumers());
+        writer.writeInFile(simulation.getDistributors(),
+                simulation.getConsumers(),
+                simulation.getProducers());
 
         simulation.clearGame();
     }

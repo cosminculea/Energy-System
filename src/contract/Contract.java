@@ -1,6 +1,6 @@
 package contract;
 
-import entities.player.Player;
+import entities.player.ActivePlayer;
 
 public interface Contract {
 
@@ -20,7 +20,7 @@ public interface Contract {
      * @return the counterpart of the contract
      */
 
-    Player getCounterpart();
+    ActivePlayer getCounterpart();
 
     /**
      * @return the price set in the contract

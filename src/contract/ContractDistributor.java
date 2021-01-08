@@ -1,7 +1,7 @@
 package contract;
 
 import entities.player.Distributor;
-import entities.player.Player;
+import entities.player.ActivePlayer;
 
 public final class ContractDistributor implements Contract {
 
@@ -9,7 +9,7 @@ public final class ContractDistributor implements Contract {
      * the consumer whom the distributor gives energy to
      */
 
-    private final Player consumer;
+    private final ActivePlayer consumer;
 
     /**
      * price of the contract
@@ -29,7 +29,7 @@ public final class ContractDistributor implements Contract {
      * @param consumer the counterpart
      */
 
-    public ContractDistributor(final Player consumer, final Player distributor) {
+    public ContractDistributor(final ActivePlayer consumer, final ActivePlayer distributor) {
         this.consumer = consumer;
         this.price = ((Distributor) distributor).getCurrentPriceContract();
         this.remainedContractMonths = ((Distributor) distributor).getContractLength();
@@ -46,7 +46,7 @@ public final class ContractDistributor implements Contract {
     }
 
     @Override
-    public Player getCounterpart() {
+    public ActivePlayer getCounterpart() {
         return consumer;
     }
 

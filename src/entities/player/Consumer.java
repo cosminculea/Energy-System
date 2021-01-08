@@ -1,10 +1,11 @@
 package entities.player;
 
 import contract.Contract;
+import entities.Player;
 import input.ConsumerInput;
 
 
-public final class Consumer implements Player {
+public final class Consumer implements ActivePlayer, Player {
     private static final double OVERDUE = 2.2;
 
     /**

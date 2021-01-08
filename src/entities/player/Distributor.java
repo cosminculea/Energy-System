@@ -1,13 +1,15 @@
 package entities.player;
 
 import contract.Contract;
-import entities.Entity;
+import entities.Player;
+import entities.Producer;
 import input.DistributorInput;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
-public final class Distributor implements Player, Entity {
+import strategies.Strategy;
+
+public final class Distributor implements ActivePlayer, Player, Observer {
     public static final double PROFIT_PERCENTAGE = 0.2;
 
     /**
@@ -44,14 +46,14 @@ public final class Distributor implements Player, Entity {
      * the energy needed by the distributor from the producers in KW
      */
 
+    private final int energyNeededKW;
 
-    private int energyNeededKW;
 
     /**
      * the strategy after which the distributor chooses his producers
      */
 
-    private String producerStrategy;
+    private Strategy producerStrategy;
 
 
     /**
@@ -73,10 +75,15 @@ public final class Distributor implements Player, Entity {
 
     private boolean isBankrupt = false;
 
+    private List<Producer> currentProducers = new ArrayList<>();
+
+    private boolean needToModify = false;
+
     /**
      * constructor which initialise the distributor's fields with data from the input(initial state)
      * @param distributorInput data from the input
      */
+
 
     public Distributor(final DistributorInput distributorInput) {
         id = distributorInput.getId();
@@ -84,11 +91,37 @@ public final class Distributor implements Player, Entity {
         budget = distributorInput.getInitialBudget();
         infrastructureCost = distributorInput.getInitialInfrastructureCost();
         energyNeededKW = distributorInput.getEnergyNeededKW();
-        producerStrategy =  distributorInput.getProducerStrategy();
         contracts = new LinkedHashMap<>();
+    }
 
-        int profit = (int) Math.round(Math.floor(PROFIT_PERCENTAGE * productionCost));
-        currentPriceContract =  infrastructureCost + productionCost + profit;
+    /**
+     *
+     */
+
+    public void calculateProductionCost() {
+
+        List<Producer> producers = producerStrategy.applyStrategy();
+        productionCost = 0;
+        int energySum = 0;
+
+        for (Producer producer : producers) {
+
+            if (producer.getCurrentDistributors().size() == producer.getMaxDistributors()) {
+                continue;
+            }
+
+            energySum += producer.getEnergyPerDistributor();
+            productionCost += producer.getEnergyPerDistributor() * producer.getPriceKW();
+
+            producer.updateMonthlyDistributors(this);
+            currentProducers.add(producer);
+
+            if (energySum > energyNeededKW) {
+                break;
+            }
+        }
+
+       productionCost = (int) Math.round(Math.floor((1.0 * productionCost / 10)));
     }
 
     /**
@@ -99,6 +132,7 @@ public final class Distributor implements Player, Entity {
      */
 
     public void calculateNewContract() {
+
         int profit = (int) Math.round(Math.floor(PROFIT_PERCENTAGE * productionCost));
 
         if (hasContract()) {
@@ -212,6 +246,17 @@ public final class Distributor implements Player, Entity {
         this.productionCost = productionCost;
     }
 
+    public void setProducerStrategy(Strategy producerStrategy) {
+        this.producerStrategy = producerStrategy;
+
+        //calculateProductionCost();
+        //int profit = (int) Math.round(Math.floor(PROFIT_PERCENTAGE * productionCost));
+        //currentPriceContract =  infrastructureCost + productionCost + profit;
+    }
+
+    public Strategy getProducerStrategy() {
+        return producerStrategy;
+    }
 
     public Map<Integer, Contract> getContracts() {
         return contracts;
@@ -235,5 +280,38 @@ public final class Distributor implements Player, Entity {
 
     public void setBudget(final int budget) {
         this.budget = budget;
+    }
+
+    public int getEnergyNeededKW() {
+        return energyNeededKW;
+    }
+
+    @Override
+    public void update(Observable producerObserved, Object arg) {
+        needToModify = (boolean) arg;
+
+//        for (Producer producer : currentProducers) {
+//            if(!producer.equals(producerObserved)) {
+//                producer.getCurrentDistributors().remove(this);
+//            }
+//        }
+
+        //currentProducers.clear();
+    }
+
+    public void resetCurrentProducers() {
+        currentProducers.clear();
+    }
+
+    public boolean isNeedToModify() {
+        return needToModify;
+    }
+
+    public void resetNeedToModify() {
+        needToModify = false;
+    }
+
+    public List<Producer> getCurrentProducers() {
+        return currentProducers;
     }
 }

@@ -37,5 +37,12 @@ public final class Constants {
     public static final String PRODUCERS = "producers";
     public static final String DISTRIBUTOR_CHANGES = "distributorChanges";
     public static final String PRODUCER_CHANGES = "producerChanges";
+    public static final String GREEN = "GREEN";
+    public static final String QUANTITY = "QUANTITY";
+    public static final String ENERGY_PRODUCERS = "energyProducers";
+    public static final String MONTHLY_STATS = "monthlyStats";
+    public static final String MONTH = "month";
+    public static final String DISTRIBUTORS_IDS = "distributorsIds";
+    public static final String CONTRACT_COST = "contractCost";
 
 }

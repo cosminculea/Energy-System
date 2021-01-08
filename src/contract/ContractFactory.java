@@ -1,7 +1,7 @@
 package contract;
 
 import constants.Constants;
-import entities.player.Player;
+import entities.player.ActivePlayer;
 
 public final class ContractFactory {
 
@@ -19,8 +19,8 @@ public final class ContractFactory {
      * or null otherwise
      */
 
-    public static Contract getContract(final Player distributor,
-                                     final Player consumer,
+    public static Contract getContract(final ActivePlayer distributor,
+                                     final ActivePlayer consumer,
                                      final String type) {
         if (type.equals(Constants.CONSUMER)) {
             return new ContractConsumer(distributor);

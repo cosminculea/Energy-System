@@ -1,6 +1,6 @@
 package entities;
 
-public interface Entity {
+public interface Player {
     /**
      * @return the player's id
      */
