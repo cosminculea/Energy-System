@@ -248,10 +248,6 @@ public final class Distributor implements ActivePlayer, Player, Observer {
 
     public void setProducerStrategy(Strategy producerStrategy) {
         this.producerStrategy = producerStrategy;
-
-        //calculateProductionCost();
-        //int profit = (int) Math.round(Math.floor(PROFIT_PERCENTAGE * productionCost));
-        //currentPriceContract =  infrastructureCost + productionCost + profit;
     }
 
     public Strategy getProducerStrategy() {
@@ -290,13 +286,6 @@ public final class Distributor implements ActivePlayer, Player, Observer {
     public void update(Observable producerObserved, Object arg) {
         needToModify = (boolean) arg;
 
-//        for (Producer producer : currentProducers) {
-//            if(!producer.equals(producerObserved)) {
-//                producer.getCurrentDistributors().remove(this);
-//            }
-//        }
-
-        //currentProducers.clear();
     }
 
     public void resetCurrentProducers() {

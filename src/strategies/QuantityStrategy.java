@@ -1,12 +1,10 @@
 package strategies;
 
-import constants.Constants;
 import entities.Producer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 public final class QuantityStrategy implements Strategy {
 
@@ -16,9 +14,19 @@ public final class QuantityStrategy implements Strategy {
 
     private final List<Producer> producers;
 
+    /**
+     * constructor
+     * @param producers all producers in the system
+     */
+
     public QuantityStrategy(final List<Producer> producers) {
         this.producers = new ArrayList<>(producers);
     }
+
+    /**
+     * - apply the strategy by sorting the producers after quantity
+     * @return list of producers sorted after the QUANTITY strategy priorities
+     */
 
     @Override
     public List<Producer> applyStrategy() {
@@ -30,6 +38,6 @@ public final class QuantityStrategy implements Strategy {
 
     @Override
     public String getType() {
-        return Constants.QUANTITY;
+        return EnergyChoiceStrategyType.QUANTITY.label;
     }
 }

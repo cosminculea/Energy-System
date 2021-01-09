@@ -148,19 +148,6 @@ public final class Simulation {
             }
         }
 
-//        for (Producer producer : producers) {
-//            List<List<Integer>> monthlyDistributorsEvidence =
-//                    producer.getMonthlyDistributorsEvidence();
-//
-//            List<Integer> currentMonth = new ArrayList<>();
-//
-//            for (Distributor distributor : producer.getCurrentDistributors()) {
-//                currentMonth.add(distributor.getId());
-//            }
-//
-//            monthlyDistributorsEvidence.add(currentMonth);
-//        }
-
     }
 
     /**
@@ -277,19 +264,6 @@ public final class Simulation {
             producer.setEnergyPerDistributor(producerChange.getEnergyPerDistributor());
             producer.notifyObservers();
         }
-
-//        for (Producer producer : producers) {
-//            List<List<Integer>> monthlyDistributorsEvidence =
-//                    producer.getMonthlyDistributorsEvidence();
-//
-//            List<Integer> currentMonth = new ArrayList<>();
-//
-//            for (Distributor distributor : producer.getCurrentDistributors()) {
-//                currentMonth.add(distributor.getId());
-//            }
-//
-//            monthlyDistributorsEvidence.add(currentMonth);
-//        }
 
     }
 

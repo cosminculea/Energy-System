@@ -132,8 +132,6 @@ public class Producer extends Observable implements Player {
         for (Distributor distributor : currentDistributors) {
             distributor.update(this, true);
         }
-
-        //currentDistributors.clear();
     }
 
     public void resetCurrentDistributors() {
