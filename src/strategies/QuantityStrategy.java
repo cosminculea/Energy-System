@@ -1,6 +1,6 @@
 package strategies;
 
-import entities.Producer;
+import player.Producer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -30,14 +30,15 @@ public final class QuantityStrategy implements Strategy {
 
     @Override
     public List<Producer> applyStrategy() {
-        producers.sort(Comparator.comparingInt(Producer::getId));
-        producers.sort((producer1, producer2) ->
-                producer2.getEnergyPerDistributor() - producer1.getEnergyPerDistributor());
+        producers.sort(Comparator.comparingInt(Producer::getEnergyPerDistributor)
+                                .reversed()
+                                .thenComparing(Producer::getId));
+
         return producers;
     }
 
     @Override
     public String getType() {
-        return EnergyChoiceStrategyType.QUANTITY.label;
+        return EnergyChoiceStrategyType.QUANTITY.getLabel();
     }
 }

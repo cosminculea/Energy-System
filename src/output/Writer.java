@@ -2,16 +2,15 @@ package output;
 
 import constants.Constants;
 import contract.Contract;
-import entities.Producer;
-import entities.player.Distributor;
-import entities.player.ActivePlayer;
+import player.Producer;
+import player.Distributor;
+import player.ActivePlayer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class Writer {
 
     /**
      * constructor which initialise the file writer
-     * @param fileName the name of the film as string
+     * @param fileName the name of the file as string
      * @throws IOException if the opening of the file failed
      */
 
@@ -34,9 +33,10 @@ public class Writer {
     }
 
     /**
-     * write all the necessary data of the consumers and distributors
+     * write all the necessary data of the consumers, distributors and producers
      * @param distributors list of all distributors in the system
      * @param consumers list of all consumer in the system
+     * @param producers list of all producers in the system
      * @throws IOException if the writing has failed
      */
 

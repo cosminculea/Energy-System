@@ -1,6 +1,6 @@
 package input;
 
-public class ProducerChange {
+public final class ProducerChange {
 
     /**
      * the id of the producer who needs to change his energy per distributor
@@ -35,7 +35,7 @@ public class ProducerChange {
         return energyPerDistributor;
     }
 
-    public void setEnergyPerDistributor(int energyPerDistributor) {
+    public void setEnergyPerDistributor(final int energyPerDistributor) {
         this.energyPerDistributor = energyPerDistributor;
     }
 }

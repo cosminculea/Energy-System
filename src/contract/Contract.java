@@ -1,6 +1,6 @@
 package contract;
 
-import entities.player.ActivePlayer;
+import player.ActivePlayer;
 
 public interface Contract {
 

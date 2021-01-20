@@ -27,17 +27,13 @@ public final class Main {
         InputLoader inputLoader = new InputLoader(file);
         Input input = inputLoader.loadData();
 
-        Simulation simulation = Simulation.getSimulation();
+        Simulation simulation = new Simulation(input);
 
-        simulation.setRounds(input.getMonthlyUpdates());
-        simulation.setPlayers(input.getInitialData(), input.getMonthlyUpdates().size());
         simulation.play();
 
         Writer writer = new Writer(args[1]);
         writer.writeInFile(simulation.getDistributors(),
                 simulation.getConsumers(),
                 simulation.getProducers());
-
-        simulation.clearGame();
     }
 }

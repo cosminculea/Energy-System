@@ -1,7 +1,10 @@
 package strategies;
 
-import entities.Producer;
-import java.util.*;
+import player.Producer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class GreenStrategy implements Strategy {
 
@@ -28,25 +31,20 @@ public final class GreenStrategy implements Strategy {
      */
 
     public List<Producer> applyStrategy() {
-        producers.sort((producer1, producer2) -> {
-            if (producer1.getEnergyType().isRenewable() &&
-                    producer2.getEnergyType().isRenewable()) {
-                return compareAfterStrategyPriorities(producer1, producer2);
-            }
+        List<Producer> producersRenewable = producers.stream()
+                .filter(producer -> producer.getEnergyType().isRenewable())
+                .sorted(this::compareAfterStrategyPriorities)
+                .collect(Collectors.toList());
 
-            if (!producer1.getEnergyType().isRenewable() &&
-                    !producer2.getEnergyType().isRenewable()) {
-                return compareAfterStrategyPriorities(producer1, producer2);
-            }
 
-            if (producer1.getEnergyType().isRenewable()) {
-                return -1;
-            } else {
-                return 1;
-            }
-        });
+        List<Producer> producersNotRenewable = producers.stream()
+                .filter(producer -> !producer.getEnergyType().isRenewable())
+                .sorted(this::compareAfterStrategyPriorities)
+                .collect(Collectors.toList());
 
-        return producers;
+        producersRenewable.addAll(producersNotRenewable);
+
+        return producersRenewable;
     }
 
     /**
@@ -69,7 +67,7 @@ public final class GreenStrategy implements Strategy {
 
     @Override
     public String getType() {
-        return EnergyChoiceStrategyType.GREEN.label;
+        return EnergyChoiceStrategyType.GREEN.getLabel();
     }
 
 }

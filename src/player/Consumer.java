@@ -1,7 +1,6 @@
-package entities.player;
+package player;
 
 import contract.Contract;
-import entities.Player;
 import input.ConsumerInput;
 
 

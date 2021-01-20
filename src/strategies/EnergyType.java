@@ -1,4 +1,4 @@
-package entities;
+package strategies;
 
 /**
  * Types of energy produced by EnergyProducers

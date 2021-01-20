@@ -1,36 +1,36 @@
 package input;
 
-public class ProducerInput {
+public final class ProducerInput {
 
     /**
      * the id of the producer
      */
 
-    final int id;
+    private final int id;
 
     /**
      * the type of energy the producer generates
      */
 
-    final String energyType;
+    private final String energyType;
 
     /**
      * the maximum number of distributors a producer can have
      */
 
-    final int maxDistributors;
+    private final int maxDistributors;
 
     /**
      * the price of the the energy per KW
      */
 
-    final double priceKW;
+    private final double priceKW;
 
     /**
      * how much energy measured in KW a producer can give to one distributor
      */
 
-    final int energyPerDistributor;
+    private final int energyPerDistributor;
 
     public ProducerInput(final String id,
                          final String energyType,

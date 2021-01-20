@@ -1,7 +1,7 @@
 package contract;
 
 import constants.Constants;
-import entities.player.ActivePlayer;
+import player.ActivePlayer;
 
 public final class ContractFactory {
 

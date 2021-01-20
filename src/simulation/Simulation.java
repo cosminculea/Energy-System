@@ -3,17 +3,27 @@ package simulation;
 import constants.Constants;
 import contract.Contract;
 import contract.ContractFactory;
-import entities.Player;
-import entities.PlayerFactory;
-import entities.Producer;
-import entities.player.Consumer;
-import entities.player.Distributor;
-import entities.player.ActivePlayer;
-import input.*;
+import player.PlayerFactory;
+import player.Producer;
+import player.Consumer;
+import player.Distributor;
+import player.ActivePlayer;
+import input.ActionInput;
+import input.ConsumerInput;
+import input.DistributorChange;
+import input.DistributorInput;
+import input.EntitiesInput;
+import input.Input;
+import input.ProducerChange;
+import input.ProducerInput;
 import strategies.Strategy;
 import strategies.StrategyFactory;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public final class Simulation {
 
@@ -57,16 +67,13 @@ public final class Simulation {
     private Map<Integer, ActivePlayer> consumersInGame;
 
     /**
-     * the only object of the class in order to maintain a singleton factory
-     */
-
-    private static final Simulation SIMULATION = new Simulation();
-
-    /**
      * private constructor which guarantee the class has a unique object (singleton pattern)
      */
 
-    private Simulation() { }
+    public Simulation(Input input) {
+        setRounds(input.getMonthlyUpdates());
+        setPlayers(input.getInitialData(), input.getMonthlyUpdates().size());
+    }
 
     /**
      * method which runs the simulation between all players by iterating through all rounds (months)
@@ -75,9 +82,11 @@ public final class Simulation {
      *    the initial relationship between them (round 0)
      *      - for every round: the monthly changes are updated, the new contracts for every
      *     distributor are calculated, all consumers receive salaries, find and sign a convenient
-     *     contract (the cheapest). Moreover, the players have to pay their debts and are eliminated
-     *     from the game if they do not have enough money. The simulation ends when whether the
-     *     rounds are over or there are no distributors left in the game
+     *     contract (the cheapest). Moreover, the active players have to pay their debts and are
+     *     eliminated from the game if they do not have enough money. The simulation ends when
+     *     whether the rounds are over or there are no distributors left in the game
+     *      - in addition, at the end of the month producers update their data and distributors
+     *      are verified if they have to recalculate their production cost
      */
 
     public void play() {
@@ -105,49 +114,43 @@ public final class Simulation {
         }
     }
 
-    private void verifyChangesDistributors() {
+    /**
+     * initialise a new month to every producer evidence
+     */
 
+    private void initialiseCurrentMonthEvidence() {
         for (Producer producer : producers) {
-            List<List<Integer>> monthlyDistributorsEvidence =
-                    producer.getMonthlyDistributorsEvidence();
-
-            List<Integer> currentMonth = new ArrayList<>();
-            monthlyDistributorsEvidence.add(currentMonth);
+            producer.initialiseNewMonthEvidence();
         }
+    }
 
-        for (ActivePlayer distributor : distributors) {
-            if (!distributor.isBankrupt() && ((Distributor)distributor).isNeedToModify()) {
+    /**
+     * at the end of the month every distributor is verified whether he needs to recalculate his
+     * production cost or not
+     * - if he does, he is removed from all his producers, finds another producers, calculate the
+     * production cost and the needToRecalculate flag is reset to false
+     * - if he does not, he is just added to the current month evidence
+     */
 
-                List<Producer> currentProducers = ((Distributor) distributor).getCurrentProducers();
+    private void verifyChangesDistributors() {
+       initialiseCurrentMonthEvidence();
 
-                for (Producer producer : currentProducers) {
-                    producer.getCurrentDistributors().remove(distributor);
-                }
+        for (ActivePlayer player : distributors) {
+            Distributor distributor = (Distributor) player;
 
-                ((Distributor) distributor).resetCurrentProducers();
-                ((Distributor) distributor).calculateProductionCost();
-                ((Distributor) distributor).resetNeedToModify();
-
+            if (!distributor.isBankrupt() && distributor.needToRecalculate()) {
+                distributor.removeFromOldProducers();
+                distributor.resetCurrentProducers();
+                distributor.calculateProductionCost();
+                distributor.resetNeedToRecalculate();
             } else {
-                if (!((Distributor)distributor).isNeedToModify()) {
-                    for (Producer producer : ((Distributor)distributor).getCurrentProducers()) {
-                        List<List<Integer>> monthlyDistributorsEvidence =
-                                     producer.getMonthlyDistributorsEvidence();
-                        List<Integer> currentMonth = monthlyDistributorsEvidence.get(monthlyDistributorsEvidence.size() - 1);
-                        currentMonth.add(distributor.getId());
+                if (!distributor.needToRecalculate()) {
+                    for (Producer producer : distributor.getCurrentProducers()) {
+                        producer.addToMonthEvidence(distributor);
                     }
                 }
             }
-
-            if (distributor.isBankrupt()) {
-                List<Producer> producers = ((Distributor) distributor).getCurrentProducers();
-
-                for (Producer producer : producers) {
-                    producer.getCurrentDistributors().remove(distributor);
-                }
-            }
         }
-
     }
 
     /**
@@ -225,9 +228,11 @@ public final class Simulation {
      */
 
     private void resolveNewConsumers(final List<ConsumerInput> newConsumers) {
+        PlayerFactory factory = PlayerFactory.getInstance();
+
         for (ConsumerInput newConsumer : newConsumers) {
             ActivePlayer consumerCreated =
-                    (ActivePlayer) PlayerFactory.getPlayer(newConsumer, Constants.CONSUMER);
+                    (ActivePlayer) factory.getPlayer(newConsumer, Constants.CONSUMER);
             consumers.add(consumerCreated);
             consumersInGame.put(consumerCreated.getId(), consumerCreated);
         }
@@ -251,6 +256,13 @@ public final class Simulation {
             distributor.setInfrastructureCost(distributorChange.getInfrastructureCost());
         }
     }
+
+    /**
+     * - the method sets the new energy per distributor given by the input for producers and
+     * notifies all the distributors for every producer that they need to recalculate their
+     * production cost
+     * @param producersChanges list of producers changes given by the input
+     */
 
     private void resolveProducersChanges(final List<ProducerChange> producersChanges) {
 
@@ -371,7 +383,7 @@ public final class Simulation {
      * @param rounds monthly updates given by the input
      */
 
-    public void setRounds(final List<ActionInput> rounds) {
+    private void setRounds(final List<ActionInput> rounds) {
         this.rounds = rounds;
     }
 
@@ -382,14 +394,16 @@ public final class Simulation {
      * @param initialData consumers and distributors given by the input
      */
 
-    public void setPlayers(final EntitiesInput initialData, int numberOfRounds) {
+    private void setPlayers(final EntitiesInput initialData, final int numberOfRounds) {
         List<ConsumerInput> consumersInput = initialData.getConsumers();
         List<DistributorInput> distributorsInput = initialData.getDistributors();
         List<ProducerInput> producersInput = initialData.getProducers();
 
+        PlayerFactory factory = PlayerFactory.getInstance();
+
         for (ProducerInput producerInput : producersInput) {
             List<List<Integer>> monthlyDistributorsEvidence = new ArrayList<>(numberOfRounds);
-            Producer newProducer = (Producer) PlayerFactory.getPlayer(producerInput,
+            Producer newProducer = (Producer) factory.getPlayer(producerInput,
                     Constants.PRODUCER);
             newProducer.setMonthlyDistributorsEvidence(monthlyDistributorsEvidence);
             producers.add(newProducer.getId(), newProducer);
@@ -398,41 +412,21 @@ public final class Simulation {
         producers.sort(Comparator.comparingInt(Producer::getId));
 
         for (DistributorInput distributorInput : distributorsInput) {
-            ActivePlayer distributor = (ActivePlayer) PlayerFactory.getPlayer(distributorInput,
+            ActivePlayer distributor = (ActivePlayer) factory.getPlayer(distributorInput,
                     Constants.DISTRIBUTOR);
 
             Strategy strategy = StrategyFactory.getStrategy(distributorInput.getProducerStrategy(),
                     producers);
 
-            ((Distributor)distributor).setProducerStrategy(strategy);
+            ((Distributor) distributor).setProducerStrategy(strategy);
 
             distributors.add(distributor);
         }
 
         for (ConsumerInput consumerInput : consumersInput) {
-            consumers.add((ActivePlayer) PlayerFactory.getPlayer(consumerInput,
+            consumers.add((ActivePlayer) factory.getPlayer(consumerInput,
                     Constants.CONSUMER));
         }
-    }
-
-    /**
-     * clears all the lists with the players
-     */
-
-    public void clearGame() {
-        distributorsInGame.clear();
-        consumersInGame.clear();
-        distributors.clear();
-        consumers.clear();
-        producers.clear();
-    }
-
-    /**
-     * @return the unique object of the class (singleton pattern)
-     */
-
-    public static Simulation getSimulation() {
-        return SIMULATION;
     }
 
     public ArrayList<ActivePlayer> getDistributors() {

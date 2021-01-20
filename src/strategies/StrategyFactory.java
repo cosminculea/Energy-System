@@ -1,12 +1,22 @@
 package strategies;
 
 
-import entities.Producer;
+import player.Producer;
 
 import java.util.List;
 
 
 public final class StrategyFactory {
+
+    /**
+     * the only instance of this class
+     */
+
+    private static final StrategyFactory FACTORY = new StrategyFactory();
+
+    /**
+     * private constructor -> Singleton Pattern
+     */
 
     private StrategyFactory() { }
 
@@ -36,5 +46,13 @@ public final class StrategyFactory {
         }
 
         return null;
+    }
+
+    /**
+     * @return the only instance of this class
+     */
+
+    public static StrategyFactory getFACTORY() {
+        return FACTORY;
     }
 }

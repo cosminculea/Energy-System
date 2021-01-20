@@ -1,8 +1,6 @@
-package entities;
+package player;
 
 import constants.Constants;
-import entities.player.Consumer;
-import entities.player.Distributor;
 import input.ConsumerInput;
 import input.DistributorInput;
 import input.ProducerInput;
@@ -13,6 +11,8 @@ public final class PlayerFactory {
      * private constructor (utility class)
      */
 
+    private static final PlayerFactory FACTORY = new PlayerFactory();
+
     private PlayerFactory() { }
 
     /**
@@ -22,7 +22,7 @@ public final class PlayerFactory {
      * @return new object depending on the type given as a parameter
      */
 
-    public static Player getPlayer(final Object entityInput, final String type) {
+    public Player getPlayer(final Object entityInput, final String type) {
         if (type.equals(Constants.CONSUMER)) {
             ConsumerInput consumerInput = (ConsumerInput) entityInput;
             return new Consumer(consumerInput);
@@ -39,5 +39,9 @@ public final class PlayerFactory {
         }
 
         return null;
+    }
+
+    public static PlayerFactory getInstance() {
+        return FACTORY;
     }
 }

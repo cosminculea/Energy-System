@@ -1,8 +1,9 @@
 package strategies;
 
-import entities.Producer;
+import player.Producer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class PriceStrategy implements Strategy {
 
@@ -50,6 +51,6 @@ public final class PriceStrategy implements Strategy {
 
     @Override
     public String getType() {
-        return EnergyChoiceStrategyType.PRICE.label;
+        return EnergyChoiceStrategyType.PRICE.getLabel();
     }
 }

@@ -1,6 +1,6 @@
 package input;
 
-public class DistributorChange {
+public final class DistributorChange {
 
     /**
      * the id of the distributor who needs to change his infrastructure cost

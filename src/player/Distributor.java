@@ -1,16 +1,21 @@
-package entities.player;
+package player;
 
 import contract.Contract;
-import entities.Player;
-import entities.Producer;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import input.DistributorInput;
 
-import java.util.*;
-
+import observer.Observer;
 import strategies.Strategy;
 
+
 public final class Distributor implements ActivePlayer, Player, Observer {
-    public static final double PROFIT_PERCENTAGE = 0.2;
+    private static final double PROFIT_PERCENTAGE = 0.2;
+    private static final int FACTOR = 10;
 
     /**
      * distributor's id
@@ -75,7 +80,15 @@ public final class Distributor implements ActivePlayer, Player, Observer {
 
     private boolean isBankrupt = false;
 
-    private List<Producer> currentProducers = new ArrayList<>();
+    /**
+     * list of all producers which gives energy to the distributor in the current month
+     */
+
+    private final List<Producer> currentProducers = new ArrayList<>();
+
+    /**
+     * flag which keeps track of the recalculation of the production cost
+     */
 
     private boolean needToModify = false;
 
@@ -95,33 +108,40 @@ public final class Distributor implements ActivePlayer, Player, Observer {
     }
 
     /**
-     *
+     * - applies the strategy this distributor has and chooses the minimum producers he needs to
+     * cover the energyNeededKW
      */
 
-    public void calculateProductionCost() {
-
+    private void chooseProducers() {
         List<Producer> producers = producerStrategy.applyStrategy();
-        productionCost = 0;
         int energySum = 0;
 
         for (Producer producer : producers) {
-
-            if (producer.getCurrentDistributors().size() == producer.getMaxDistributors()) {
-                continue;
+            if (producer.getNumberOfDistributors() != producer.getMaxDistributors()) {
+                energySum += producer.getEnergyPerDistributor();
+                producer.updateMonthlyDistributors(this);
+                currentProducers.add(producer);
             }
-
-            energySum += producer.getEnergyPerDistributor();
-            productionCost += producer.getEnergyPerDistributor() * producer.getPriceKW();
-
-            producer.updateMonthlyDistributors(this);
-            currentProducers.add(producer);
 
             if (energySum > energyNeededKW) {
                 break;
             }
         }
+    }
 
-       productionCost = (int) Math.round(Math.floor((1.0 * productionCost / 10)));
+    /**
+     * - the distributor chooses their producers and production cost is calculated
+     */
+
+    public void calculateProductionCost() {
+        chooseProducers();
+        productionCost = 0;
+
+        for (Producer producer : currentProducers) {
+            productionCost += producer.getEnergyPerDistributor() * producer.getPriceKW();
+        }
+
+        productionCost = (int) Math.round(Math.floor((1.0 * productionCost / FACTOR)));
     }
 
     /**
@@ -142,7 +162,6 @@ public final class Distributor implements ActivePlayer, Player, Observer {
         } else {
             currentPriceContract =  infrastructureCost + productionCost + profit;
         }
-
     }
 
     /**
@@ -229,6 +248,50 @@ public final class Distributor implements ActivePlayer, Player, Observer {
         contracts.clear();
     }
 
+    /**
+     * sets the neeToModify variable as true which means that the current distributor must find
+     * another producer
+     */
+
+    @Override
+    public void update() {
+        needToModify = true;
+    }
+
+    /**
+     * removes this distributor from every producer's list
+     */
+
+    public void removeFromOldProducers() {
+        for (Producer producer : currentProducers) {
+            producer.removeObserver(this);
+        }
+    }
+
+    /**
+     * removes all producers this distributor has
+     */
+
+    public void resetCurrentProducers() {
+        currentProducers.clear();
+    }
+
+    /**
+     * @return the state of the distributor as far as the production cost is concerned
+     */
+
+    public boolean needToRecalculate() {
+        return needToModify;
+    }
+
+    /**
+     * resets distributor state as far as the production cost is concerned
+     */
+
+    public void resetNeedToRecalculate() {
+        needToModify = false;
+    }
+
     public int getBudget() {
         return budget;
     }
@@ -280,24 +343,6 @@ public final class Distributor implements ActivePlayer, Player, Observer {
 
     public int getEnergyNeededKW() {
         return energyNeededKW;
-    }
-
-    @Override
-    public void update(Observable producerObserved, Object arg) {
-        needToModify = (boolean) arg;
-
-    }
-
-    public void resetCurrentProducers() {
-        currentProducers.clear();
-    }
-
-    public boolean isNeedToModify() {
-        return needToModify;
-    }
-
-    public void resetNeedToModify() {
-        needToModify = false;
     }
 
     public List<Producer> getCurrentProducers() {
