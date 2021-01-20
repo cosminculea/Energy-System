@@ -106,7 +106,7 @@ public final class Simulation {
             paymentDayDistributors();
 
             resolveProducersChanges(round.getProducersChanges());
-            verifyChangesDistributors();
+            verifyRecalculationDistributors();
 
             if (distributorsInGame.size() == 0) {
                 break;
@@ -132,7 +132,7 @@ public final class Simulation {
      * - if he does not, he is just added to the current month evidence
      */
 
-    private void verifyChangesDistributors() {
+    private void verifyRecalculationDistributors() {
        initialiseCurrentMonthEvidence();
 
         for (ActivePlayer player : distributors) {
@@ -399,11 +399,12 @@ public final class Simulation {
         List<DistributorInput> distributorsInput = initialData.getDistributors();
         List<ProducerInput> producersInput = initialData.getProducers();
 
-        PlayerFactory factory = PlayerFactory.getInstance();
+        PlayerFactory playerFactory = PlayerFactory.getInstance();
+        StrategyFactory strategyFactory = StrategyFactory.getInstance();
 
         for (ProducerInput producerInput : producersInput) {
             List<List<Integer>> monthlyDistributorsEvidence = new ArrayList<>(numberOfRounds);
-            Producer newProducer = (Producer) factory.getPlayer(producerInput,
+            Producer newProducer = (Producer) playerFactory.getPlayer(producerInput,
                     Constants.PRODUCER);
             newProducer.setMonthlyDistributorsEvidence(monthlyDistributorsEvidence);
             producers.add(newProducer.getId(), newProducer);
@@ -412,10 +413,10 @@ public final class Simulation {
         producers.sort(Comparator.comparingInt(Producer::getId));
 
         for (DistributorInput distributorInput : distributorsInput) {
-            ActivePlayer distributor = (ActivePlayer) factory.getPlayer(distributorInput,
+            ActivePlayer distributor = (ActivePlayer) playerFactory.getPlayer(distributorInput,
                     Constants.DISTRIBUTOR);
 
-            Strategy strategy = StrategyFactory.getStrategy(distributorInput.getProducerStrategy(),
+            Strategy strategy = strategyFactory.getStrategy(distributorInput.getProducerStrategy(),
                     producers);
 
             ((Distributor) distributor).setProducerStrategy(strategy);
@@ -424,7 +425,7 @@ public final class Simulation {
         }
 
         for (ConsumerInput consumerInput : consumersInput) {
-            consumers.add((ActivePlayer) factory.getPlayer(consumerInput,
+            consumers.add((ActivePlayer) playerFactory.getPlayer(consumerInput,
                     Constants.CONSUMER));
         }
     }

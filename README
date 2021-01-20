@@ -21,57 +21,104 @@ Culea Cosmin
 
 		---Player package---
 
-			- contains 3 classes: Consumer, Distributor and PlayerFactory and
-		one interface: Player which abstracts the two types of players (consumer
-		and distributor)
+			- contains 4 classes: Consumer, Distributor, Producer and
+		PlayerFactory and 2 interfaces: Player which abstracts all players
+		(consumers, distributors and producers),and ActivePlayer which abstracts
+		the players who have an active role in the simulation, who receive
+		money, pay debts and can become bankrupt and leave the game (consumers
+		and distributors)
 			- Consumer and Distributor are the classes which model the entities
 		needed to simulate an energy system. They have an id, a budget, can
 		sign or terminate a contract, receive money, pay debts and be bankrupt
-		all of these being generalised by the Player interface. The relationship
-		between them as far as the simulation is concerned is established 
-		through the contract as follows: "a distributor HAS MANY consumer" and
-		"a consumer HAS A distributor" at every given time (month).
+		all of these being generalised by the ActivePlayer interface. The
+		relationship between them as far as the simulation is concerned is
+		established through the contract as follows: "a distributor HAS MANY
+		consumer" and "a consumer HAS A distributor" at every given time
+		(month).
+		    - Producer is the class which models the passive player of energy
+		system, because they exist throughout the entire simulation and they are
+		chosen by distributors. In consequence they have a list of distributors
+		which is updated everytime it is needed, when they change their data or
+		when their distributors become bankrupt or need to recalculate their
+		production cost.
 
 		---Simulation package---
 
 			- contains one class: Simulation in which are conceived all players 
 		and are set up the relationships between them as in simulation of 
 		real-life, every month being seen as a round in a game.
-			- the most important methods which can be used are setPlayers, 
-		setRounds, play and clearGame, and should be used in this exact order.
-		The first two methos creates the game context, the third method runs all
-		the actions and last remove the game context (players and rounds). 
-		However, the backend of the game is encapsulated in private methods
-		which are forward used in play method in order to have logical timeline.
+			- a Simulation object can be constructed only through the input
+		data in which all the players, the relationships between them, and
+		rounds are set. The class dispose of the only public method play(),
+		the backend of the game being encapsulated in private methods which are
+		forward used in play method in order to have logical timeline.
 
 		---Input package---
 
-			- contains 6 classes which precisely model the input format: 
-		EntitiesInput which HAS MANY DistributorInput and ConsumerInput, 
-		ActionInput which HAS MANY CostsChanges and ConsumerInput, and Input
-		which HAS AN EntitiesInput and HAS MANY ActionInput.
-			- also contains 2 classes for reading and writing data from and in
-		JSON format: InputLoader and Writer. 
+		    - contains 9 classes which precisely model the input format:
+		        - EntitiesInput which HAS MANY DistributorInput and
+		        ConsumerInput, ProducerInput
+		        - ActionInput which HAS MANY DistributorChanges, ProducerChanges
+		        and ConsumerInput
+		        - Input which HAS AN EntitiesInput and HAS MANY ActionInput.
+			- also contains 1 class InputLoader for reading and loading the
+			data into objects
 
-		---Constants pachake---
+		---Constants package---
 
 			- contains Constants class which helps in making the code more 
 		readable for reading and writing
+
+		---Output package---
+
+		    - contains one class Writer which writes all data from the
+		simulation
+
+		---Observer package---
+
+            - contains 2 interfaces Observer and Observable which model a
+        relationship between distributors(observers) and producers(observables)
+        according to observer pattern. Because a Producer HAS MANY Distributor,
+        and because the distributor depends on the producer state and data,
+        producers need to notify all the distributors they have in order for
+        the observers to update.
+
+        ---Strategies package---
+
+            - contains 3 classes GreenStrategy, PriceStrategy and
+        QuantityStrategy which models 3 types of strategies a distributor can
+        have. All three types are abstracted by the Strategy interface and are
+        created through the StrategyFactory which implements both Factory and
+        Singleton Pattern.
+            - every type of strategy has an implementation of sorting and
+        filtering the producers in applyStrategy() method
+            - a Distributor HAS A Strategy, and also the Distributor is the
+        context in which the strategy is applied, more specifically in the
+        method chooseProducers ()
+
 
 	Flow and design patterns
 
 		- the main method from Main class is the place where reading, playing
 	and writing are combined. First the input is loaded by the InputLoader in an
-	object of type Input. Moreover, the game access is made only through the 
-	unique instance of Simulation which implements a Singleton pattern, because
-	this class is rather a context, an "arena", for players to play. The
+	object of type Input. Moreover, the game is created, constructed with the
+	input data, which will represent the "arena" where players will play. The
 	simulation instance has a database (three lists) with all players which have 
-	been part of the game in the whole simulation and all rounds which have to
-	be executed. The players are set thourgh the method setPlayers which uses
-	the PlayerFactory (which implemets a Factory pattern) to creates the 
-	entities. This is the conditions that must be fulfilled in order for the
-	game to be played properly. Then the play method runs all the rounds and 
-	finally the database of simulation is written in the file given by 
-	arguments. In the end, the database of the simulation instance (game) is
-	cleared.
- 
+	been part of the game in the whole simulation and all rounds which have been
+	executed and another two lists with the active players remained in the game.
+	    The players are set through the method setPlayers which uses the
+	PlayerFactory (which combines both Singleton and Factory Pattern) to creates
+	the entities.
+	    Then the play method runs all the rounds in a logical timeline:
+	        - resolves new consumers
+            - resolve distributors changes
+            - calculate new contracts
+            - receive salaries
+            - find and sign new contracts
+            - consumers pay debts
+            - distributors pay debts
+            - resolve producers changes
+            - verify recalculation of the production costs for distributors
+
+	    Finally the database of simulation is written in the file given by
+	arguments.
