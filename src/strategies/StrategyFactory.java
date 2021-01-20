@@ -28,7 +28,7 @@ public final class StrategyFactory {
      * @return strategy for distributor
      */
 
-    public static Strategy getStrategy(final String type,
+    public Strategy getStrategy(final String type,
                                        final List<Producer> producers) {
 
         EnergyChoiceStrategyType energyType = EnergyChoiceStrategyType.valueOf(type);
@@ -52,7 +52,7 @@ public final class StrategyFactory {
      * @return the only instance of this class
      */
 
-    public static StrategyFactory getFACTORY() {
+    public static StrategyFactory getInstance() {
         return FACTORY;
     }
 }
